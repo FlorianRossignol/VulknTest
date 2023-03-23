@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+#Binaries
+x64/
+
+#visual studio
+.vs/
