@@ -26,6 +26,8 @@ public:
 
 private:
 
+
+
     void initWindow()
     {
         glfwInit();
@@ -39,6 +41,15 @@ private:
     void initVulkan() {
 
         createInstance();
+        setupDebugMessenger();
+    }
+
+    void setupDebugMessenger()
+    {
+	    if (!enableValidationLayers)
+	    {
+		  return;  
+	    }
     }
 
     void mainLoop() {
@@ -81,7 +92,6 @@ private:
         createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
         createInfo.ppEnabledExtensionNames = extensions.data();
 
-
 	    if (enableValidationLayers)
 	    {
             createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
@@ -112,6 +122,7 @@ private:
         for (const char* layerName : validationLayers)
         {
             bool layerFound = false;
+
             for (const auto& layerProperties : availableLayers)
             {
 	            if (strcmp(layerName,layerProperties.layerName) == 0)
@@ -146,6 +157,17 @@ private:
         return extensions;
     }
 
+    static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
+        VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+        VkDebugUtilsMessageTypeFlagsEXT messageType,
+        const VkDebugUtilsMessengerCallbackDataEXT pcallbackData,
+        void* pUserData)
+    {
+        std::cerr << "validation layer:" << pcallbackData.pMessage << std::endl;
+
+        return VK_FALSE;
+    }
+
     GLFWwindow* m_window;
 
     const uint32_t WIDTH = 800;
@@ -159,6 +181,8 @@ private:
     const std::vector<const char*> validationLayers = {
         "VK_LAYER_KHRONOS_validation"
     };
+
+    VkDebugUtilsMessengerEXT callback;
 
 };
 
