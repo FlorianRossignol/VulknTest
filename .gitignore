@@ -33,7 +33,7 @@
 
 #Binaries
 x64/
-TestVulkan/x64/
+VulkanTest/x64/
 
 #visual studio
 .vs/
